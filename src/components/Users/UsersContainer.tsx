@@ -1,5 +1,5 @@
-import { Spinner } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useState } from "react";
+import { Spinner } from "@chakra-ui/react";
 import { User, UserResponse } from "types/user";
 import Users from "./Users";
 

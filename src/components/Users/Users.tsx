@@ -19,27 +19,15 @@ interface UsersProps {
 function Users(props: UsersProps) {
   const { loadMore, users, hasMore, isLoading } = props;
 
-  const { ref, isIntersecting, observer } = useInfiniteScroll({
-    hasMore: true,
+  const { ref } = useInfiniteScroll({
+    hasMore,
+    loadMore,
   });
 
-  useEffect(() => {
-    if (hasMore && isIntersecting) {
-      loadMore();
-      observer?.disconnect();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasMore, isIntersecting, loadMore]);
+  console.log(users.length);
 
   return (
     <Box>
-      <Button
-        onClick={() => {
-          loadMore();
-        }}
-      >
-        Load more
-      </Button>
       <UnorderedList>
         {users.map((user, idx) => {
           if (idx === users.length - 1) {
