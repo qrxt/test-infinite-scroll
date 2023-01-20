@@ -24,7 +24,7 @@ function useInfiniteScroll(params: InfiniteScrollHookParams) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasMore, isIntersecting, loadMore]);
 
-  const ref = (node: Element) => {
+  const ref = (node: HTMLElement | null) => {
     if (!node) {
       return;
     }

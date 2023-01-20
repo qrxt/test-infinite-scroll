@@ -1,13 +1,7 @@
-import React, { useEffect } from "react";
-import {
-  Box,
-  Button,
-  UnorderedList,
-  ListItem,
-  Spinner,
-} from "@chakra-ui/react";
-import useInfiniteScroll from "lib/useInfiniteScroll";
+import React from "react";
+import { Box, UnorderedList, ListItem, Spinner } from "@chakra-ui/react";
 import { User } from "types/user";
+import InfiniteScroll from "components/InfiniteScroll";
 
 interface UsersProps {
   users: User[];
@@ -19,33 +13,21 @@ interface UsersProps {
 function Users(props: UsersProps) {
   const { loadMore, users, hasMore, isLoading } = props;
 
-  const { ref } = useInfiniteScroll({
-    hasMore,
-    loadMore,
-  });
-
-  console.log(users.length);
-
   return (
-    <Box>
-      <UnorderedList>
-        {users.map((user, idx) => {
-          if (idx === users.length - 1) {
-            return (
-              <ListItem key={user.email} bg="tomato" fontSize="xl">
-                <p ref={ref}>{user.name.first}</p>
-              </ListItem>
-            );
-          }
-
-          return (
-            <ListItem key={user.email} fontSize="xl" mb="8">
-              {user.name.first}
-            </ListItem>
-          );
-        })}
-      </UnorderedList>
-      {isLoading && <Spinner size="lg" />}
+    <Box p={6}>
+      <InfiniteScroll<User>
+        as={UnorderedList}
+        rowRenderer={({ item, ref }) => (
+          <ListItem ref={ref} key={item.email} mb={12}>
+            {item.name.first}
+          </ListItem>
+        )}
+        loadingRenderer={() => <Spinner size="xl" />}
+        items={users}
+        hasMore={hasMore}
+        loadMore={loadMore}
+        isLoading={isLoading}
+      ></InfiniteScroll>
     </Box>
   );
 }
