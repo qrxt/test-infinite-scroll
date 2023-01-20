@@ -1,10 +1,11 @@
 import React from "react";
-import { Box, UnorderedList, ListItem, Spinner } from "@chakra-ui/react";
-import { User } from "types/user";
+import { Box, ListItem, Spinner, List, Center } from "@chakra-ui/react";
+import { User as UserType } from "types/user";
 import InfiniteScroll from "components/InfiniteScroll";
+import User from "components/User";
 
 interface UsersProps {
-  users: User[];
+  users: UserType[];
   loadMore: () => void;
   isLoading: boolean;
   hasMore: boolean;
@@ -15,19 +16,25 @@ function Users(props: UsersProps) {
 
   return (
     <Box p={6}>
-      <InfiniteScroll<User>
-        as={UnorderedList}
-        rowRenderer={({ item, ref }) => (
-          <ListItem ref={ref} key={item.email} mb={12}>
-            {item.name.first}
+      <InfiniteScroll<UserType, typeof List>
+        as={List}
+        columns="2"
+        spacing="15"
+        rowRenderer={({ item: user, ref }) => (
+          <ListItem ref={ref} key={user.email} mb={6}>
+            <User user={user} />
           </ListItem>
         )}
-        loadingRenderer={() => <Spinner size="xl" />}
+        loadingRenderer={() => (
+          <Center w="100%">
+            <Spinner size="xl" />
+          </Center>
+        )}
         items={users}
         hasMore={hasMore}
         loadMore={loadMore}
         isLoading={isLoading}
-      ></InfiniteScroll>
+      />
     </Box>
   );
 }

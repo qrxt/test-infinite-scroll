@@ -1,23 +1,37 @@
-import React, { ElementType } from "react";
+import React, { ComponentProps, ElementType } from "react";
 import useInfiniteScroll from "lib/useInfiniteScroll";
 
-type RowRendererParams<T> = {
-  item: T;
+type RowRendererParams<DataType> = {
+  item: DataType;
   ref?: (node: HTMLElement | null) => void;
   index?: number;
 };
 
-interface InfiniteScrollProps<T> {
-  items: T[];
-  as?: ElementType;
-  rowRenderer: (params: RowRendererParams<T>) => React.ReactNode;
+interface InfiniteScrollOwnProps<
+  DataType,
+  E extends ElementType = ElementType
+> {
+  items: DataType[];
+  as?: E;
+  rowRenderer: (params: RowRendererParams<DataType>) => React.ReactNode;
   loadingRenderer?: () => React.ReactNode;
   hasMore: boolean;
   loadMore: () => void;
   isLoading: boolean;
 }
 
-function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
+const defaultElement = "div";
+
+type InfiniteScrollProps<
+  DataType,
+  E extends ElementType
+> = InfiniteScrollOwnProps<DataType, E> &
+  Omit<ComponentProps<E>, keyof InfiniteScrollOwnProps<DataType>>;
+
+function InfiniteScroll<
+  DataType,
+  E extends ElementType = typeof defaultElement
+>(props: InfiniteScrollProps<DataType, E>) {
   const {
     items,
     as,
@@ -26,15 +40,16 @@ function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
     loadMore,
     isLoading,
     loadingRenderer = () => null,
+    ...rest
   } = props;
-  const TagName = as || "div";
+  const TagName = as || defaultElement;
   const { ref } = useInfiniteScroll({
     hasMore,
     loadMore,
   });
 
   return (
-    <TagName>
+    <TagName {...rest}>
       {items.map((item, index) => {
         if (index === items.length - 1) {
           return rowRenderer({ item, index, ref });
