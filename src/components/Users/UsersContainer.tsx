@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Spinner } from "@chakra-ui/react";
+import { Center, Spinner } from "@chakra-ui/react";
 import { User, UserResponse } from "types/user";
 import Users from "./Users";
 
 function UsersContainer() {
   const [users, setUsers] = useState<User[]>([]);
   const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
@@ -27,8 +27,12 @@ function UsersContainer() {
     setIsLoading(true);
   }, []);
 
-  if (!users && isLoading) {
-    return <Spinner size="lg" />;
+  if (!users.length && isLoading) {
+    return (
+      <Center>
+        <Spinner size="lg" />
+      </Center>
+    );
   }
 
   return (

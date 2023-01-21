@@ -1,7 +1,7 @@
-import React, { ComponentProps, ElementType } from "react";
+import React, { ComponentProps, ElementType, useCallback } from "react";
 import useInfiniteScroll from "lib/useInfiniteScroll";
 
-type RowRendererParams<DataType> = {
+export type RowRendererParams<DataType> = {
   item: DataType;
   ref?: (node: HTMLElement | null) => void;
   index?: number;
@@ -13,7 +13,7 @@ interface InfiniteScrollOwnProps<
 > {
   items: DataType[];
   as?: E;
-  rowRenderer: (params: RowRendererParams<DataType>) => React.ReactNode;
+  children: ElementType;
   loadingRenderer?: () => React.ReactNode;
   hasMore: boolean;
   loadMore: () => void;
@@ -35,11 +35,11 @@ function InfiniteScroll<
   const {
     items,
     as,
-    rowRenderer,
     hasMore,
     loadMore,
     isLoading,
     loadingRenderer = () => null,
+    children,
     ...rest
   } = props;
   const TagName = as || defaultElement;
@@ -48,16 +48,21 @@ function InfiniteScroll<
     loadMore,
   });
 
+  const Row = children || defaultElement;
+  const loadingRendererCallback = useCallback(loadingRenderer, [
+    loadingRenderer,
+  ]);
+
   return (
     <TagName {...rest}>
       {items.map((item, index) => {
         if (index === items.length - 1) {
-          return rowRenderer({ item, index, ref });
+          return <Row key={index} ref={ref} item={item} />;
         }
 
-        return rowRenderer({ item, index });
+        return <Row key={index} item={item} />;
       })}
-      {isLoading && loadingRenderer()}
+      {isLoading && loadingRendererCallback()}
     </TagName>
   );
 }
