@@ -7,7 +7,7 @@ export type RowRendererParams<DataType> = {
   index?: number;
 };
 
-interface InfiniteScrollOwnProps<
+export interface InfiniteScrollOwnProps<
   DataType,
   E extends ElementType = ElementType
 > {
@@ -22,7 +22,7 @@ interface InfiniteScrollOwnProps<
 
 const defaultElement = "div";
 
-type InfiniteScrollProps<
+export type InfiniteScrollProps<
   DataType,
   E extends ElementType
 > = InfiniteScrollOwnProps<DataType, E> &
@@ -55,13 +55,13 @@ function InfiniteScroll<
 
   return (
     <TagName {...rest}>
-      {items.map((item, index) => {
-        if (index === items.length - 1) {
-          return <Row key={index} ref={ref} item={item} />;
-        }
-
-        return <Row key={index} item={item} />;
-      })}
+      {items.map((item, index) =>
+        index === items.length - 1 ? (
+          <Row key={index} ref={ref} item={item} />
+        ) : (
+          <Row key={index} item={item} />
+        )
+      )}
       {isLoading && loadingRendererCallback()}
     </TagName>
   );
