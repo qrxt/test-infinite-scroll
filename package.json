@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "docs": "jsdoc -c ./.jsdoc.conf.json --pedantic"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.4.9",

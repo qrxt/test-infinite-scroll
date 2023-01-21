@@ -5,6 +5,16 @@ interface InfiniteScrollHookParams extends IntersectionObserverInit {
   loadMore: () => void;
 }
 
+export type UseInfiniteScrollResult = ReturnType<typeof useInfiniteScroll>;
+
+/**
+ * Custom React hook that allows to handle infinite scroll logic
+ * for paginated data using Intersection Observer.
+ * The hook will load new data using loadMore function.
+ * The hook will load new data as long as hasMore param is true.
+ * @param {InfiniteScrollHookParams} params
+ * @returns {UseInfiniteScrollResult}
+ */
 function useInfiniteScroll(params: InfiniteScrollHookParams) {
   const {
     root = null,
