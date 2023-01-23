@@ -43,7 +43,7 @@ export type InfiniteScrollResult = ReturnType<typeof InfiniteScroll>;
  * * You can render InfiniteScroll as any another html element or React component
  * * You can customize loading component using loadingRenderer prop
  *
- * The component does not memoize the string component, so you may need to do it yourself
+ * The component does not memoize Row component, so you may need to do it yourself
  *
  * @param {InfiniteScrollProps<DataType, E>} props
  * @returns {InfiniteScrollResult}
